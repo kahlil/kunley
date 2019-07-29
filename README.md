@@ -1,13 +1,13 @@
-# FlowState 🌊
+# Kunley
 
-Dead simple Redux and redux-observable library built with RxJS streams. This is an easy way to introduce a stream-based unidirectional dataflow into your app.
+A simple way to manage UI state and side effects with RxJS.
 
 ## Highlights
 
 - Inspired by Redux and redux-observable
 - The state is delivered with streams
 - Reducers are just functions, no switch-case
-- Isolate side effects that map back to actions
+- Isolate side effects that map back to actions (or not)
 
 ## Install
 
@@ -22,6 +22,7 @@ const flowState = createFlowState();
 ```
 
 ### Dispatch Actions
+
 In your components dispatch actions by passing the action constant and optionally
 an action payload. The payload can be any value.
 
@@ -30,6 +31,7 @@ flowState.dispatch({ type: 'SOME_ACTION', payload: { some: 'state' } });
 ```
 
 ### Create A State Stream Based On Reducers
+
 In a file that you could call Store,
 create and expose state streams for your components
 by passing the respective reducers.
@@ -40,9 +42,9 @@ depend on one another.
 ```js
 // A collection of reducers.
 const itemListReducers = {
-  deleteItem: (action, state) => state
-    .filter(item => state.filter(item.id !== action.payload.id)),
-    
+  deleteItem: (action, state) =>
+    state.filter(item => state.filter(item.id !== action.payload.id)),
+
   addItem: (action, state) => [...state, action.payload],
   // ...
 };
@@ -50,19 +52,20 @@ const itemListReducers = {
 itemListState$ = flowState.createState$(itemListReducers, initialState);
 ```
 
-In your component you can now subscribe to the component state stream: 
+In your component you can now subscribe to the component state stream:
 
 ```js
 itemListState$.subscribe(state => console.log(state));
 ```
 
 ### Trigger Side Effects
-You can trigger your side effects similar to redux-observable 
-by listening to the actions stream, triggering your side effect 
+
+You can trigger your side effects similar to redux-observable
+by listening to the actions stream, triggering your side effect
 and return a new action.
 
-Each side effect is a function and has to be passed to 
-`flowState.runSideEffects`. 
+Each side effect is a function and has to be passed to
+`flowState.runSideEffects`.
 
 The action that the result of each side effect maps to
 
