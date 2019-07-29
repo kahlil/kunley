@@ -27,7 +27,7 @@ test('kunley.action$', t => {
   );
 });
 
-test.only('dispatch()', t => {
+test('dispatch()', t => {
   t.plan(1);
   const actionOne = payload => ({
     type: 'ACTION_ONE',
