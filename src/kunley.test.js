@@ -5,7 +5,7 @@ import test from 'ava';
 let kunley;
 
 test.beforeEach(() => {
-  kunley = createKunley();
+  kunley = createKunley(0);
 });
 
 test.afterEach.always(() => {
@@ -27,18 +27,17 @@ test('kunley.action$', t => {
   );
 });
 
-test('dispatch()', t => {
+test.only('dispatch()', t => {
   t.plan(1);
-  const actions = { testAction: payload => state => state + payload };
-  const return$ = kunley.action$.pipe(skip(1)).subscribe(action => {
-    t.is(
-      action.toString(),
-      actions.testAction().toString(),
-      'Correct action is dispatched.'
-    );
+  const actionOne = payload => ({
+    type: 'ACTION_ONE',
+    reducer: state => state + payload,
   });
-  // Set the actioncreators.
-  kunley.dispatch(actions.testAction(1));
+  const return$ = kunley.action$.pipe(skip(1)).subscribe(action => {
+    t.is(action.type, actionOne(1).type, 'Correct action is dispatched.');
+  });
+  t.log(actionOne(1));
+  kunley.dispatch(actionOne(1));
   return return$;
 });
 

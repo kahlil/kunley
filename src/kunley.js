@@ -2,19 +2,21 @@ import { scan } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 
 export class Kunley {
-  constructor(initialState, init) {
-    const initialAction = init || (state => state);
+  constructor(initialState, init, debug = false) {
+    const initialAction = init || { type: 'INIT', reducer: state => state };
     this._action$ = new BehaviorSubject(initialAction);
     this._state$ = new BehaviorSubject(initialState);
 
     this._action$
       .pipe(
-        scan(
-          (state, actionWithPayload) => actionWithPayload(state),
-          initialState
-        )
+        scan((state, action) => {
+          return action.reducer(state);
+        }, initialState)
       )
       .subscribe(state => this._state$.next(state));
+
+    this._action$.subscribe(action => (debug ? { action } : undefined));
+    this._state$.subscribe(state => (debug ? { state } : undefined));
   }
 
   dispatch(action) {
@@ -36,6 +38,6 @@ export class Kunley {
   }
 }
 
-export function createKunley() {
-  return new Kunley();
+export function createKunley(initialState) {
+  return new Kunley(initialState);
 }
