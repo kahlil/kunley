@@ -2,18 +2,9 @@ import { createKunley } from './kunley';
 import { skip, map, filter } from 'rxjs/operators';
 import test from 'ava';
 
-let kunley;
-
-test.beforeEach(() => {
-  kunley = createKunley(0);
-});
-
-test.afterEach.always(() => {
-  kunley = null;
-});
-
 test('kunley.action$', t => {
   t.plan(2);
+  const kunley = createKunley(1);
   const dispatcher$ = kunley.action$;
   t.is(
     typeof dispatcher$.next,
@@ -27,8 +18,10 @@ test('kunley.action$', t => {
   );
 });
 
+// @ts-ignore
 test('dispatch()', t => {
   t.plan(1);
+  const kunley = createKunley(1);
   const actionOne = payload => ({
     type: 'ACTION_ONE',
     reducer: state => state + payload,
@@ -44,7 +37,7 @@ test('dispatch()', t => {
 // @ts-ignore
 test('runSideEffects()', t => {
   t.plan(1);
-  kunley = createKunley();
+  const kunley = createKunley(1);
   const sideEffect = action$ =>
     action$.pipe(
       filter(({ type }) => type === 'INIT'),
