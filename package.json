@@ -1,6 +1,6 @@
 {
   "name": "kunley",
-  "version": "11.0.0",
+  "version": "10.0.1",
   "description": "A simple way to manage UI state and side effects with RxJS.",
   "license": "MIT",
   "repository": "kahlil/kunley",
