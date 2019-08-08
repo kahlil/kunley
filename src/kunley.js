@@ -38,6 +38,6 @@ export class Kunley {
   }
 }
 
-export function createKunley(...args) {
-  return new Kunley(...args);
+export function createKunley(initialState) {
+  return new Kunley(initialState);
 }
